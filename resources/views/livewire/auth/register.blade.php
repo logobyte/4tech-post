@@ -25,8 +25,6 @@ new #[Layout('components.layouts.auth')] class extends Component {
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $validated['password'] = $validated['password'];
-
         event(new Registered(($user = User::create($validated))));
 
         Auth::login($user);
