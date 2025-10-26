@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('/posts', PostController::class); // ->except(['index']);
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::get('posts/{post:uuid}', [PostController::class, 'show'])->name('posts.show');
 
 
 
