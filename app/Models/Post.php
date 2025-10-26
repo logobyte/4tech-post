@@ -18,14 +18,26 @@ class Post extends Model
         'content',
     ];
 
-    // protected $with = [ 'user'];
-    // protected $withCount = ['user'];
+    /**
+     * Get the user that owns the post.
+     */
     public function user()
     {
-
+        // A post belongs to a user
+        return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get the comments for the post.
+     */
+    public function comments()
+    {
+        // A post has many comments
+        return $this->hasMany(Comment::class);
+    }
+
+    // If you're using a custom primary key (uuid), make sure to set it here
     // protected $primaryKey = 'uuid';
 
-    // protected $table = 'posts';
+    // protected $table = 'posts';  // Uncomment if you have a custom table name
 }

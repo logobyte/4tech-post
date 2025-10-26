@@ -51,6 +51,50 @@
                     </div>
                 </figcaption>
             </figure>
+
+            <!-- Comments Section -->
+            <div class="mt-12">
+                <h2 class="text-2xl font-semibold text-white">Comments:</h2>
+
+                <!-- Display Comments -->
+                @foreach($post->comments as $comment)
+                    <div class="bg-white p-4 rounded-lg shadow-md mb-4 mt-4">
+                        <div class="font-semibold text-lg">{{ $comment->user->name }}</div>
+                        <p class="mt-2 text-gray-700 dark:text-gray-300">{{ $comment->comment }}</p>
+                        <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                            {{ $comment->created_at->diffForHumans() }}
+                        </div>
+
+                        <!-- Comment Deletion (Only allow the author of the comment or admins to delete) -->
+                        @if(auth()->check() && (auth()->user()->id === $comment->user_id || auth()->user()->is_admin))
+                            <form action="{{ route('comments.destroy', [$post->uuid, $comment->id]) }}" method="POST" class="mt-4">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:text-red-500">Delete Comment</button>
+                            </form>
+                        @endif
+                    </div>
+                @endforeach
+
+                <!-- Comment Form (only visible to authenticated users) -->
+                @auth
+                    <form action="{{ route('comments.store', $post->uuid) }}" method="POST">
+                        @csrf
+                        <textarea name="comment" class="w-full p-3 border rounded-md" rows="4" placeholder="Write your comment here..."></textarea>
+
+                        <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            Post Comment
+                        </button>
+                    </form>
+                @endauth
+
+                <!-- Message for users who are not authenticated -->
+                @guest
+                    <div class="mt-4 text-gray-400">
+                        Please <a href="{{ route('login') }}" class="text-blue-500 hover:underline">login</a> to leave a comment.
+                    </div>
+                @endguest
+            </div>
         </div>
     </section>
 </x-layouts.app>
