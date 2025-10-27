@@ -19,5 +19,7 @@ class AdminMiddleware
             return $next($request);
         }
         return $next($request);
+
+        //abort (403, 'Unauthorized page')
     }
 }
